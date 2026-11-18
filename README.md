@@ -9,6 +9,8 @@
 
 **[Открыть case study →](https://jefo.github.io/vpn-sales-bot/)**
 
+<img src="docs/screens/vpn-sales-bot/01.png" alt="Тарифы VPN" width="360" />
+
 ---
 
 ## Что это
