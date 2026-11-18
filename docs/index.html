@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>VPN Sales Bot — case study</title><meta name="description" content="Минимальный сценарий продажи VPN: три тарифа, имитация оплаты и демонстрационный .ovpn-конфиг. 133 строки TypeScript."><link rel="canonical" href="https://jefo.github.io/vpn-sales-bot/"><meta property="og:title" content="VPN Sales Bot — case study"><meta property="og:description" content="Минимальный сценарий продажи VPN: три тарифа, имитация оплаты и демонстрационный .ovpn-конфиг. 133 строки TypeScript."><meta property="og:type" content="article"><meta name="theme-color" content="#faf9f5"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2315161c'/%3E%3Cpath d='M8 10h16v2H8zm0 5h10v2H8zm0 5h13v2H8z' fill='%23faf9f5'/%3E%3C/svg%3E"><link rel="stylesheet" href="./assets/global.RvaBOxuC.css"></head><body><a class="skip" href="#content">К содержанию</a><header class="site-header"><div class="shell header-inner"><a class="header-mark" href="https://github.com/jefo">jefo / case studies</a><nav class="header-nav" aria-label="Внешние ссылки"><a href="https://github.com/jefo/vpn-sales-bot">исходники</a><a href="https://github.com/jefo?tab=repositories">все репозитории</a></nav></div></header><div class="shell"><section class="hero" aria-labelledby="project-title"><div><h1 class="hero-title" id="project-title">VPN Sales Bot</h1><p class="hero-lede">Минимальный сценарий продажи VPN: три тарифа, имитация оплаты и демонстрационный .ovpn-конфиг. 133 строки TypeScript.</p><div class="hero-actions"><a class="button" href="https://github.com/jefo/vpn-sales-bot">Открыть исходники</a><a class="button button-secondary" href="#run">Как запустить</a></div></div><div class="spec" aria-label="Краткие факты"><div class="spec-row"><span class="spec-label">Состояние</span><span class="spec-value is-warn">демо-сценарий</span></div><div class="spec-row"><span class="spec-label">Роль</span><span class="spec-value is-info">сценарий, код</span></div><div class="spec-row"><span class="spec-label">Стек</span><span class="spec-value is-info">Bun · TypeScript · Telegram Bot API</span></div><div class="spec-row"><span class="spec-label">Код</span><span class="spec-value is-info">133 строки TS</span></div><div class="spec-row"><span class="spec-label">ID</span><span class="spec-value mono" style="font-size:13px">bot://vpn-sales</span></div></div></section><main class="main" id="content"><aside class="rail"><div class="rail-title">На этой странице</div><nav class="rail-nav" aria-label="Содержание"><a href="#dialog" data-rail="dialog">Диалог</a><a href="#capabilities" data-rail="capabilities">Что умеет</a><a href="#architecture" data-rail="architecture">Как устроено</a><a href="#data" data-rail="data">Ограничения</a><a href="#run" data-rail="run">Запуск</a><a href="#next" data-rail="next">Дальше</a></nav></aside><article class="article"><section class="section" id="dialog" data-section><h2 class="section-title">Диалог</h2><div class="terminal" aria-label="telegram / vpn-sales"><div class="terminal-head"><span>telegram / vpn-sales</span><span>long polling</span></div><div class="terminal-body"><div class="msg"><span class="msg-role bot">bot</span><p class="msg-text">Выберите тариф
+
+1 месяц — $10
+6 месяцев — $50
+1 год — $90</p></div><div class="msg"><span class="msg-role user">user</span><p class="msg-text">6 месяцев</p></div><div class="msg"><span class="msg-role bot">bot</span><p class="msg-text">6 месяцев
+
+К оплате: $50
+До 5 устройств, выгода 17%
+
+Это демо: платёж имитируется, конфиг тестовый.</p></div><div class="msg"><span class="msg-role user">user</span><p class="msg-text">Оплатить</p></div><div class="msg"><span class="msg-role bot">bot</span><p class="msg-text">Оплата прошла успешно.
+
+Ваш конфиг ниже. Сохраните его в файл vpn.ovpn.
+
+client
+dev tun
+proto udp
+remote vpn.example.com 1194</p></div><div class="msg-buttons" aria-label="Кнопки бота"><span class="msg-button">1 месяц — $10</span><span class="msg-button">6 месяцев — $50</span><span class="msg-button">1 год — $90</span></div></div></div></section><section class="section" id="capabilities" data-section><h2 class="section-title">Что умеет</h2><ul class="cap-list"><li>Три тарифа с ценой и описанием.</li><li>Карточка выбранного тарифа.</li><li>Имитация оплаты.</li><li>Выдача демонстрационного OpenVPN-конфига.</li><li>Возврат к списку тарифов.</li></ul></section><section class="section" id="architecture" data-section><h2 class="section-title">Как устроено</h2><div class="arch-grid"><div class="layers" aria-label="Слои"><div class="layer"><span class="layer-name">src/index.ts</span><span class="layer-detail">polling, меню, оплата, выдача</span></div><div class="layer"><span class="layer-name">src/domain/plans.ts</span><span class="layer-detail">тарифы и демо-конфиг</span></div><div class="layer"><span class="layer-name">Telegram</span><span class="layer-detail">inline-кнопки и HTML</span></div><div class="layer"><span class="layer-name">Биллинг</span><span class="layer-detail">отсутствует</span></div></div><div><div class="code-head"><span>file tree</span><span>7 строк</span></div><pre class="code-block" aria-label="Структура проекта"><code><span class="tree-dir">src/</span>
+<span class="tree-dir">├── domain/</span>
+<span class="tree-file">│   └── plans.ts</span>
+<span class="tree-file">└── index.ts</span>
+<span class="tree-file">    ├── plans</span>
+<span class="tree-file">    ├── payment</span>
+<span class="tree-file">    └── config</span></code></pre></div></div></section><section class="section" id="data" data-section><h2 class="section-title">Что реально, а что mock</h2><p class="section-lede">Ниже — фактическое состояние проекта. Всё, что помечено как mock или отсутствует, не выдаётся за готовую функцию.</p><table class="limits"><thead><tr><th scope="col">Пункт</th><th scope="col">Состояние</th></tr></thead><tbody><tr><td>Оплата</td><td><span class="chip chip-warn">mock</span> имитация, без провайдера</td></tr><tr><td>Ключи</td><td><span class="chip chip-err">нет</span> нет уникальных ключей и привязки</td></tr><tr><td>База</td><td><span class="chip chip-err">нет</span> нет истории заказов</td></tr><tr><td>Конфиг</td><td><span class="chip chip-warn">mock</span> заглушка, не рабочий сервер</td></tr><tr><td>Лимиты</td><td><span class="chip chip-err">нет</span> нет ограничений по устройствам и трафику</td></tr></tbody></table><div class="note"><strong>Как читать таблицу.</strong> «Не готово» — реализации нет в репозитории. «Ограничение» — функция есть, но работает в узких рамках. Это проверяется по README и коду.</div></section><section class="section" id="run" data-section><h2 class="section-title">Запуск</h2><div class="arch-grid"><div><div class="code-head"><span>.env</span><button class="copy" type="button" data-copy="BOT_TOKEN=123456:AA...">копировать</button></div><pre class="code-block" aria-label="Переменные окружения"><code><span class="key">BOT_TOKEN</span>=<span class="str">123456:AA...</span></code></pre></div><div><div class="code-head"><span>terminal</span><button class="copy" type="button" data-copy="bun install
+cp .env.example .env
+bun run start">копировать</button></div><pre class="code-block" aria-label="Команды запуска"><code><span class="cmd">bun install</span>
+<span class="cmd">cp .env.example .env</span>
+<span class="cmd">bun run start</span></code></pre></div></div></section><section class="section" id="next" data-section><h2 class="section-title">Что дальше</h2><ol class="steps"><li>Платёжный провайдер и вебхук.</li><li>Генерация WireGuard/OpenVPN-конфига на сервере.</li><li>Учёт подписок, продлений и лимитов.</li><li>Отзыв доступа по истечении срока.</li></ol></section></article></main></div><footer class="site-footer"><div class="shell"><div class="footer-grid"><div><h2 class="footer-title">Другие проекты</h2><p class="footer-copy">Шесть отдельных репозиториев. У каждого — свой README и эта страница. Исходники открыты, демо-данные помечены.</p></div><nav class="footer-links" aria-label="Другие проекты"><a href="https://jefo.github.io/computer-master-bot/"><span>Computer Master Bot</span><span>↗</span></a><a href="https://jefo.github.io/esim-telegram-bot/"><span>eSIM Telegram Bot</span><span>↗</span></a><a href="https://jefo.github.io/sales-report-bot/"><span>Sales Report Bot</span><span>↗</span></a><a href="https://jefo.github.io/prof-tinder-bot/"><span>Prof Tinder Bot</span><span>↗</span></a><a href="https://jefo.github.io/booking-domain/"><span>Booking Domain</span><span>↗</span></a></nav></div><div class="footer-bottom"><span>VPN Sales Bot · case study · 2026</span><span><a href="https://github.com/jefo/vpn-sales-bot">github.com/jefo/vpn-sales-bot</a></span></div></div></footer><script>
+      const railLinks = [...document.querySelectorAll('[data-rail]')];
+      const sections = railLinks
+        .map((link) => document.getElementById(link.dataset.rail))
+        .filter(Boolean);
+
+      if ('IntersectionObserver' in window && sections.length) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            const visible = entries
+              .filter((entry) => entry.isIntersecting)
+              .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+            if (!visible) return;
+            for (const link of railLinks) {
+              if (link.dataset.rail === visible.target.id) {
+                link.setAttribute('aria-current', 'true');
+              } else {
+                link.removeAttribute('aria-current');
+              }
+            }
+          },
+          { rootMargin: '-18% 0px -62% 0px', threshold: [0, 0.1, 0.5] }
+        );
+        sections.forEach((section) => observer.observe(section));
+      }
+
+      for (const button of document.querySelectorAll('[data-copy]')) {
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(button.dataset.copy || '');
+            button.textContent = 'скопировано';
+            button.dataset.copied = 'true';
+            setTimeout(() => {
+              button.textContent = 'копировать';
+              delete button.dataset.copied;
+            }, 1600);
+          } catch {
+            button.textContent = 'выделите вручную';
+          }
+        });
+      }
+    </script></body></html>
