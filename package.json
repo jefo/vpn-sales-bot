@@ -1,0 +1,19 @@
+{
+  "name": "vpn-sales-bot",
+  "version": "1.0.0",
+  "description": "Демо Telegram-бота для продажи VPN-подписок",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun run --hot src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@bot-machine/telegram-client": "^1.0.7"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.9.2"
+  }
+}
